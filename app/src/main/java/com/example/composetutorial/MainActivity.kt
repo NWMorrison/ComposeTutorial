@@ -128,7 +128,7 @@ fun MessageCard( msg: Message ) {
             Spacer( modifier = Modifier.height(4.dp) ) // [2.4] Adding vertical space between author and the message.
 
             // [3.4] Allows customizing the messages' body shape and elevation
-            Surface ( shape = MaterialTheme.shapes.medium, shadowElevation = 1.dp ) {
+            Surface ( shape = MaterialTheme.shapes.medium, shadowElevation = 10.dp ) {
                 Text( text = msg.body,
                       modifier = Modifier.padding(all = 4.dp),
                       style = MaterialTheme.typography.bodyMedium  // [3.3] Typography
