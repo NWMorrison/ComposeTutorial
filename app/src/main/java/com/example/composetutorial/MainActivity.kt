@@ -38,19 +38,44 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
+// Lesson 3.1 - Understanding ComposeTutorialTheme and Theme.kt
+// Lesson 3.2 -> 3.4 - Material Design is built around (3) pillars:
+// Lesson *.2 - Color
+import androidx.compose.foundation.border
+import androidx.compose.material3.MaterialTheme
+
+// Lesson *.3 - Typography
+
+// Lesson *.4 - Shape -> Surface Allows customizing the messages' body shape and elevation
+import androidx.compose.material3.Surface
+
+
+// Lesson 3.5 - Enabling Dark Theme
+import android.content.res.Configuration
+
+
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate( savedInstanceState: Bundle? ) {
+        super.onCreate( savedInstanceState )
         enableEdgeToEdge()
+
 
         // setContent "defines the activity's layout where composable functions are called."
         setContent {
-            // Text("Hello World!") // [1.1]
-            MessageCard(Message("Android", "Jetpack Compose"))
+            // 'ProjectNameTheme' allows for consistency across the entire app.
+            ComposeTutorialTheme { // [3.1] - Allows composable/s style inheritance as defined in Theme.kt.
+                Surface( modifier=Modifier.fillMaxSize() ){ // [3.1] - Surfaces relate to our Theme.
+                    // Text("Hello World!") // [1.1]
+                    MessageCard( Message("Android", "Jetpack Compose") )
+                }
+
+
+            }
         }
     }
 }
@@ -69,50 +94,67 @@ fun MessageCard(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     ComposeTutorialTheme {
-        MessageCard("World")
+        MessageCard( "World" )
     }
 }
 */
 
 // [2.1] Adding multiple texts
-data class Message(val author: String, val body: String)
+data class Message( val author: String, val body: String )
 
 @Composable
-fun MessageCard(msg: Message) {
+fun MessageCard( msg: Message ) {
     // [2.3] Use of Row
-    Row(modifier = Modifier.padding(all = 8.dp)) { // [2.4] Use of modifiers
+    Row( modifier = Modifier.padding(all = 8.dp) ) { // [2.4] Use of modifiers
         Image(
-            painter = painterResource(R.drawable.profile_picture),
+            painter = painterResource( R.drawable._16047357 ),
             contentDescription = "Contact profile picture",
             modifier = Modifier
-
-                //Setting image size to 40 dp
-                .size(40.dp)
-
-                // Clip image to be shaped like a circle
-                .clip(CircleShape)
+                .size( 40.dp ) // Setting image size to 40 dp
+                .clip( CircleShape ) // Clip image to be shaped like a circle
+                .border( 2.0.dp, MaterialTheme.colorScheme.primary, CircleShape ) // [3.2] Adding a colored border.
         )
 
-        // [2.4] Adding horizontal space between image and columns.
-        Spacer(modifier = Modifier.width(8.dp))
 
-        // [2.3] Use of Column
-        Column {
-            Text(text = msg.author)
+        Spacer( modifier = Modifier.width(8.dp) ) // [2.4] - Adding horizontal space between image and columns.
 
-            // [2.4] Adding vertical space between author and the message.
-            Spacer(modifier = Modifier.height(4.dp))
 
-            Text(text = msg.body)
+        Column {// [2.3] - Use of Column
+            Text( text = msg.author,
+                  color = MaterialTheme.colorScheme.secondary, // [3.2] Adding color to msg.author.
+                  style = MaterialTheme.typography.titleSmall // [3.3] Typography
+                )
+
+            Spacer( modifier = Modifier.height(4.dp) ) // [2.4] Adding vertical space between author and the message.
+
+            // [3.4] Allows customizing the messages' body shape and elevation
+            Surface ( shape = MaterialTheme.shapes.medium, shadowElevation = 1.dp ) {
+                Text( text = msg.body,
+                      modifier = Modifier.padding(all = 4.dp),
+                      style = MaterialTheme.typography.bodyMedium  // [3.3] Typography
+                )
+            }
         }
     }
 }
 
-@Preview
+// [3.5] Enabling dark mode while comparing its Light Mode counterpart.
+@Preview(name = "Light Mode")
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+    name = "Dark Mode"
+)
+
 @Composable
 fun PreviewMessageCard(){
-    MessageCard(
-        msg = Message("Lexi", "Hey, take a look at this jetpack compost, it's great!")
-    )
+    ComposeTutorialTheme { // [3.1]
+        Surface { // [3.1]
+            MessageCard(
+                msg = Message("Nash",
+                               "Hey, take a look at this message card example, it's great!")
+            )
+        }
+    }
 }
 
