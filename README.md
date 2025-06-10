@@ -1,1 +1,2 @@
-<img source='Output.png' width=500px height=500px />
+![Code Output](Output.png)
+
